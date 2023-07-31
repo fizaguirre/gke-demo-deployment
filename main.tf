@@ -44,6 +44,13 @@ resource "kubernetes_service" "app_service" {
   }
 }
 
+resource "kubernetes_secret" "app_cert" {
+  metadata {
+    name = "app-cert-secret"
+  }
+  data = { "tls.crt" = file(var.app_cert_filepath), "tls.key" = file(var.app_cert_pk_filepath) }
+}
+
 resource "kubernetes_ingress_v1" "app_ingress_lb" {
   metadata {
     name = "appingresslb"
@@ -56,6 +63,9 @@ resource "kubernetes_ingress_v1" "app_ingress_lb" {
           number = var.gke_service_target_http_port
         }
       }
+    }
+    tls {
+      secret_name = kubernetes_secret.app_cert.metadata[0].name
     }
   }
 }

@@ -6,7 +6,7 @@ resource "kubernetes_deployment" "app_deployment" {
     selector {
       match_labels = { "app" = "dokuwiki" }
     }
-    replicas = "1"
+    replicas = var.application_replicas_count
     template {
       metadata {
         labels = { "app" = "dokuwiki" }
@@ -48,7 +48,7 @@ resource "kubernetes_secret" "app_cert" {
   metadata {
     name = "app-cert-secret"
   }
-  data = { "tls.crt" = file(var.app_cert_filepath), "tls.key" = file(var.app_cert_pk_filepath) }
+  data = { "tls.crt" = file(abspath(var.app_cert_filepath)), "tls.key" = file(abspath(var.app_cert_pk_filepath)) }
 }
 
 resource "kubernetes_ingress_v1" "app_ingress_lb" {

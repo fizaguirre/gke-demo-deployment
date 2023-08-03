@@ -15,3 +15,5 @@ variable "app_cert_filepath" {
 variable "app_cert_pk_filepath" {
   type = string
 }
+
+variable "application_replicas_count" {}

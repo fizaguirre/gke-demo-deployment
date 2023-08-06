@@ -12,9 +12,19 @@ resource "kubernetes_deployment" "app_deployment" {
         labels = { "app" = "dokuwiki" }
       }
       spec {
+        volume {
+          name = "data"
+          empty_dir {
+
+          }
+        }
         container {
           image = "bitnami/dokuwiki"
           name  = "dokuwiki"
+          volume_mount {
+            name       = "data"
+            mount_path = "/bitnami/dokuwiki/"
+          }
           port {
             container_port = var.gke_service_target_http_port
             protocol       = "TCP"
@@ -22,6 +32,19 @@ resource "kubernetes_deployment" "app_deployment" {
           port {
             container_port = 8443
             protocol       = "TCP"
+          }
+        }
+        container {
+          image = "alpine"
+          name  = "node-info"
+          env {
+            name  = "DOKUWIKI_PAGES_PATH"
+            value = "/bitnami/dokuwiki/data/pages/wiki"
+          }
+          command = ["/bin/sh", "-c", "while [ true ]; do if [ -d $DOKUWIKI_PAGES_PATH ]; then echo \"Hostname: $HOSTNAME\" > $DOKUWIKI_PAGES_PATH/node.txt; sleep 1200; fi done"]
+          volume_mount {
+            name       = "data"
+            mount_path = "/bitnami/dokuwiki/"
           }
         }
       }

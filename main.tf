@@ -91,4 +91,10 @@ resource "kubernetes_ingress_v1" "app_ingress_lb" {
       secret_name = kubernetes_secret.app_cert.metadata[0].name
     }
   }
+  wait_for_load_balancer = true
+}
+
+output "app_endpoint" {
+  value       = "https://${kubernetes_ingress_v1.app_ingress_lb.status[0].load_balancer[0].ingress[0].ip}/"
+  description = "Application external endpoint"
 }

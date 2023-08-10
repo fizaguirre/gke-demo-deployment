@@ -1,8 +1,3 @@
-variable "kubeconfig_location" {
-  type        = string
-  description = "Path to the kube config file"
-}
-
 variable "gke_service_name" {
   type = string
 }

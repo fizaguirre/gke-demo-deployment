@@ -71,7 +71,7 @@ resource "kubernetes_secret" "app_cert" {
   metadata {
     name = "app-cert-secret"
   }
-  data = { "tls.crt" = file(abspath(var.app_cert_filepath)), "tls.key" = file(abspath(var.app_cert_pk_filepath)) }
+  data = { "tls.crt" = var.ssl_certificate, "tls.key" = var.rsa_private_key }
 }
 
 resource "kubernetes_ingress_v1" "app_ingress_lb" {

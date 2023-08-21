@@ -4,14 +4,12 @@ variable "gke_service_name" {
 
 variable "gke_service_target_http_port" {}
 
-variable "app_cert_filepath" {
-  type        = string
-  description = "Path to the SSL certificate to be used by the application"
+variable "ssl_certificate" {
+  description = "SSL Certificate to be used by the Load Balancer"  
 }
 
-variable "app_cert_pk_filepath" {
-  type        = string
-  description = "Path to the Private Key related to the SSL certificate"
+variable "rsa_private_key" {
+  description = "RSA Private Key that belongs to the SSL Certificate used by this module"  
 }
 
 variable "application_replicas_count" {
